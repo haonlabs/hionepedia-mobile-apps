@@ -38,6 +38,7 @@ dependencies:
   get: ^4.6.6
   get_storage: ^2.1.1
   google_fonts: ^6.2.1
+  just_audio: ^0.9.46
   model_viewer_plus: ^1.9.1
   path_provider: ^2.1.5
   smooth_page_indicator: ^1.2.0+3
@@ -46,6 +47,7 @@ dependencies:
 
 dev_dependencies:
   flutter_lints: ^5.0.0
+  flutter_native_splash: ^2.4.4
   flutter_test:
     sdk: flutter
 
@@ -86,3 +88,6 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_native_splash:
+  color: "#00416A"
+  image: assets/illustration/splash.png

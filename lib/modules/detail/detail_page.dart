@@ -7,6 +7,7 @@ import 'package:hionepedia/data/model/db_model.dart';
 import 'package:hionepedia/modules/favorite/controller/favorite_controller.dart';
 import 'package:hionepedia/theme/styles.dart';
 import 'package:hionepedia/utlis/file_downloader.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:model_viewer_plus/model_viewer_plus.dart';
 
 class DetailPage extends StatelessWidget {
@@ -14,6 +15,7 @@ class DetailPage extends StatelessWidget {
 
   final favoriteController = Get.find<FavoriteController>();
   final dynamic animalData;
+  final audioPlayer = AudioPlayer();
 
   @override
   Widget build(BuildContext context) {
@@ -63,10 +65,9 @@ class DetailPage extends StatelessWidget {
                     ),
                     const Spacer(),
                     IconButton(
-                        onPressed: () {
-                          // audioPlayer.setUrl(
-                          //     '${ApiRepository.apiUrl}/sound/${widget.animalData.sound}');
-                          // audioPlayer.play();
+                        onPressed: () async {
+                          await audioPlayer.setUrl(animalData.soundUrl);
+                          await audioPlayer.play();
                         },
                         icon: Image.asset(
                           'assets/icon/sound.png',

@@ -7,6 +7,7 @@ import 'package:hionepedia/modules/auth/register_page.dart';
 import 'package:hionepedia/modules/favorite/favorite_page.dart';
 import 'package:hionepedia/modules/home/home_page.dart';
 import 'package:hionepedia/modules/onboarding/onboarding_page.dart';
+import 'package:hionepedia/modules/page/page.dart';
 import 'package:hionepedia/modules/user/profile_page.dart';
 import 'package:hionepedia/theme/styles.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -41,7 +42,9 @@ class MyApp extends StatelessWidget {
       initialBinding: AppBinding(),
       routes: {
         "/": (context) => GetStorage().hasData("isLoggedFirst")
-            ? LoginPage()
+            ? GetStorage().hasData("fullname")
+                ? MyPage()
+                : LoginPage()
             : OnboardingPage(),
         "/login": (context) => LoginPage(),
         "/register": (context) => RegisterPage(),

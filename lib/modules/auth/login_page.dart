@@ -48,7 +48,7 @@ class LoginPage extends GetView<AuthController> {
               child: TextField(
                 controller: usernameCtrl,
                 keyboardType: TextInputType.name,
-                textInputAction: TextInputAction.next,
+                textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(
                     Icons.account_box,
