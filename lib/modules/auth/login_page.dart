@@ -103,6 +103,14 @@ class LoginPage extends GetView<AuthController> {
             // ),
             GestureDetector(
                 onTap: () {
+                  if (usernameCtrl.text.isEmpty) {
+                    Get.snackbar('Oops', 'Nama tidak boleh kosong',
+                        backgroundColor: redColor,
+                        colorText: Colors.white,
+                        snackPosition: SnackPosition.BOTTOM,
+                        margin: const EdgeInsets.all(15));
+                    return;
+                  }
                   controller.login(usernameCtrl.text.trim());
                 },
                 child: controller.isLoading.value
