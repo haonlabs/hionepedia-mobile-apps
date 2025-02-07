@@ -25,7 +25,7 @@ class FavoritePage extends GetView<FavoriteController> {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          } else if (snapshot.data!.isEmpty) {
             return Center(child: Text('Tidak ada hewan favorit.'));
           }
           final favoriteAnimals = snapshot.data!;
