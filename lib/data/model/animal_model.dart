@@ -12,7 +12,6 @@ String animalModelToJson(List<AnimalModel> data) =>
 
 class AnimalModel {
   int id;
-  DateTime createdAt;
   String name;
   String desc;
   String thumbnailUrl;
@@ -21,7 +20,6 @@ class AnimalModel {
 
   AnimalModel({
     required this.id,
-    required this.createdAt,
     required this.name,
     required this.desc,
     required this.thumbnailUrl,
@@ -31,7 +29,6 @@ class AnimalModel {
 
   factory AnimalModel.fromJson(Map<String, dynamic> json) => AnimalModel(
         id: json["id"],
-        createdAt: DateTime.parse(json["created_at"]),
         name: json["name"],
         desc: json["desc"],
         thumbnailUrl: json["thumbnail_url"],
@@ -45,7 +42,6 @@ class AnimalModel {
 
   Map<String, dynamic> toJson() => {
         "id": id,
-        "created_at": createdAt.toIso8601String(),
         "name": name,
         "desc": desc,
         "thumbnail_url": thumbnailUrl,

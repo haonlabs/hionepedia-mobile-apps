@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hionepedia/data/local/database_helper.dart';
-import 'package:hionepedia/data/model/db_model.dart';
+import 'package:hionepedia/data/model/animal_model.dart';
 import 'package:hionepedia/modules/favorite/controller/favorite_controller.dart';
 import 'package:hionepedia/theme/styles.dart';
 import 'package:hionepedia/utlis/file_downloader.dart';
@@ -14,12 +14,13 @@ class DetailPage extends StatelessWidget {
   DetailPage({super.key, required this.animalData});
 
   final favoriteController = Get.find<FavoriteController>();
-  final dynamic animalData;
+  final AnimalModel animalData;
   final audioPlayer = AudioPlayer();
 
   @override
   Widget build(BuildContext context) {
     DatabaseHelper dbHelper = DatabaseHelper();
+    log("file: ${animalData.modelUrl}");
 
     return Scaffold(
       body: SafeArea(
@@ -53,6 +54,7 @@ class DetailPage extends StatelessWidget {
                   ar: true,
                   autoRotate: true,
                   cameraControls: true,
+                  arPlacement: ArPlacement.floor,
                 ),
               ),
               Padding(
@@ -66,47 +68,70 @@ class DetailPage extends StatelessWidget {
                     const Spacer(),
                     IconButton(
                         onPressed: () async {
-                          await audioPlayer.setUrl(animalData.soundUrl);
-                          await audioPlayer.play();
+                          if (animalData.soundUrl != null) {
+                            await audioPlayer.setUrl(animalData.soundUrl!);
+                            await audioPlayer.play();
+                          }
                         },
                         icon: Image.asset(
                           'assets/icon/sound.png',
                           width: 24,
                         )),
                     IconButton(onPressed: () async {
-                      String imagePath = await downloadFile(
-                          animalData.thumbnailUrl, '${animalData.name}.jpg');
-                      String mp3Path = '';
-                      if (animalData.soundUrl != null) {
-                        mp3Path = await downloadFile(
-                            animalData.soundUrl!, '${animalData.name}.mp3');
-                      }
-                      AnimalFavorite favorite = AnimalFavorite(
-                        name: animalData.name,
-                        desc: animalData.desc,
-                        thumbnailUrl: imagePath,
-                        soundUrl: mp3Path,
-                      );
-                      if (favoriteController.favoriteData.any(
-                          (favorite) => favorite.name == animalData.name)) {
-                        await dbHelper.deleteFavorite(animalData.name);
+                      favoriteController.isLoading.value = true;
+                      if (favoriteController.favoriteData
+                          .any((favorite) => favorite.id == animalData.id)) {
+                        await dbHelper.deleteFavorite(animalData.id);
                       } else {
-                        await dbHelper.insertFavorite(favorite);
+                        String imagePath = await downloadFile(
+                            animalData.thumbnailUrl, '${animalData.id}.jpg');
+                        String? mp3Path;
+                        if (animalData.soundUrl != null) {
+                          mp3Path = await downloadFile(
+                              animalData.soundUrl!, '${animalData.id}.mp3');
+                        }
+                        String? modelUrl;
+                        if (animalData.modelUrl != null) {
+                          modelUrl = await downloadFile(
+                              animalData.modelUrl!, '${animalData.id}.glb');
+                        }
+                        AnimalModel favorite = AnimalModel(
+                          id: animalData.id,
+                          name: animalData.name,
+                          desc: animalData.desc,
+                          thumbnailUrl: imagePath,
+                          soundUrl: mp3Path,
+                          modelUrl: modelUrl,
+                        );
+                        await dbHelper.insertFavorite(favorite).then((value) {
+                          favoriteController.isLoading.value = false;
+                          Get.snackbar(
+                              'Success', 'Berhasil menambahkan ke favorite',
+                              backgroundColor: Colors.white,
+                              borderWidth: 1,
+                              borderColor: Colors.green,
+                              snackPosition: SnackPosition.BOTTOM,
+                              margin: const EdgeInsets.all(15));
+                        });
                       }
                       favoriteController.getListFavorite();
                     }, icon: Obx(
                       () {
-                        log("fav: ${favoriteController.favoriteData.any((favorite) => favorite.name == animalData.name)}");
-                        return favoriteController.favoriteData.any(
-                                (favorite) => favorite.name == animalData.name)
-                            ? Image.asset(
-                                'assets/icon/favorite.png',
-                                width: 24,
+                        log("fav: ${favoriteController.favoriteData.any((favorite) => favorite.id == animalData.id)}");
+                        return favoriteController.isLoading.value
+                            ? Center(
+                                child: CircularProgressIndicator(),
                               )
-                            : Icon(
-                                Icons.favorite,
-                                color: Colors.grey,
-                              );
+                            : favoriteController.favoriteData.any(
+                                    (favorite) => favorite.id == animalData.id)
+                                ? Image.asset(
+                                    'assets/icon/favorite.png',
+                                    width: 24,
+                                  )
+                                : Icon(
+                                    Icons.favorite,
+                                    color: Colors.grey,
+                                  );
                       },
                     ))
                   ],

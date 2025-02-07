@@ -163,6 +163,7 @@ void openDialog(BuildContext context, AnimalModel animalData) {
           decoration: BoxDecoration(
             color: lightGrey,
             borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.green),
           ),
           child: IconButton(
               icon: const Icon(

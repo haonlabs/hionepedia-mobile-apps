@@ -6,12 +6,19 @@ import 'package:path_provider/path_provider.dart';
 
 Future<String> downloadFile(String url, String fileName) async {
   try {
-    Dio dio = Dio();
     // Mendapatkan direktori penyimpanan
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String savePath = '${appDocDir.path}/$fileName';
+    Directory? appDocDir = await getDownloadsDirectory();
+    String savePath = '${appDocDir?.path}/$fileName'.trim();
 
-    // Mengunduh file
+    // Check if the file already exists
+    File file = File(savePath);
+    if (await file.exists()) {
+      log('File already exists at: $savePath');
+      return savePath; // Return the existing file path
+    }
+
+    // If the file does not exist, download it
+    Dio dio = Dio();
     await dio.download(url, savePath);
     log('File downloaded to: $savePath');
     return savePath;

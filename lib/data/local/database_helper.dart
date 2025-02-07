@@ -1,4 +1,4 @@
-import 'package:hionepedia/data/model/db_model.dart';
+import 'package:hionepedia/data/model/animal_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -36,29 +36,29 @@ class DatabaseHelper {
     ''');
   }
 
-  Future<void> insertFavorite(AnimalFavorite favorite) async {
+  Future<void> insertFavorite(AnimalModel favorite) async {
     final db = await database;
-    await db.insert('favorites', favorite.toMap());
+    await db.insert('favorites', favorite.toJson());
   }
 
-  Future<List<AnimalFavorite>> getFavorites() async {
+  Future<List<AnimalModel>> getFavorites() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('favorites');
 
     return List.generate(maps.length, (i) {
-      return AnimalFavorite(
+      return AnimalModel(
         id: maps[i]['id'],
         name: maps[i]['name'],
         desc: maps[i]['desc'],
         thumbnailUrl: maps[i]['thumbnail_url'],
         soundUrl: maps[i]['sound_url'],
-        modelUrl: maps[i]['model_url'],
+        modelUrl: "file://${maps[i]['model_url']}",
       );
     });
   }
 
-  Future<void> deleteFavorite(String name) async {
+  Future<void> deleteFavorite(int id) async {
     final db = await database;
-    await db.delete('favorites', where: 'name = ?', whereArgs: [name]);
+    await db.delete('favorites', where: 'id = ?', whereArgs: [id]);
   }
 }
