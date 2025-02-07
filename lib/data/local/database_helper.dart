@@ -52,7 +52,9 @@ class DatabaseHelper {
         desc: maps[i]['desc'],
         thumbnailUrl: maps[i]['thumbnail_url'],
         soundUrl: maps[i]['sound_url'],
-        modelUrl: "file://${maps[i]['model_url']}",
+        modelUrl: maps[i]['model_url'] != null
+            ? "file://${maps[i]['model_url']}"
+            : null,
       );
     });
   }
