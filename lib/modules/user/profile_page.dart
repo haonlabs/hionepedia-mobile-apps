@@ -26,7 +26,7 @@ class ProfilePage extends GetView<UserController> {
         Padding(
           padding: const EdgeInsets.only(top: 20),
           child: Text(
-            'Saya suka Belajar Hewan Langka',
+            'Saya suka belajar hewan langka',
             style: textStyle,
           ),
         ),
