@@ -16,6 +16,7 @@ class DetailPage extends StatelessWidget {
   final favoriteController = Get.find<FavoriteController>();
   final AnimalModel animalData;
   final audioPlayer = AudioPlayer();
+  final bool? isFavorited = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +70,11 @@ class DetailPage extends StatelessWidget {
                     IconButton(
                         onPressed: () async {
                           log("file: ${animalData.soundUrl}");
-                          if (animalData.soundUrl != null) {
+                          if (isFavorited != null) {
                             await audioPlayer.setFilePath(animalData.soundUrl!);
+                            await audioPlayer.play();
+                          } else {
+                            await audioPlayer.setUrl(animalData.soundUrl!);
                             await audioPlayer.play();
                           }
                         },

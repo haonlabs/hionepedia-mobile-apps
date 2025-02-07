@@ -47,9 +47,11 @@ class FavoritePage extends GetView<FavoriteController> {
                     log("file: ${favoriteAnimals[index].thumbnailUrl}");
                     return GestureDetector(
                       onTap: () => {
-                        Get.to(() => DetailPage(
-                              animalData: favoriteAnimals[index],
-                            ))
+                        Get.to(
+                            () => DetailPage(
+                                  animalData: favoriteAnimals[index],
+                                ),
+                            arguments: true),
                       },
                       child: Container(
                           padding: const EdgeInsets.all(10),
