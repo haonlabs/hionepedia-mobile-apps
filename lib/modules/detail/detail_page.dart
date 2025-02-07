@@ -68,8 +68,9 @@ class DetailPage extends StatelessWidget {
                     const Spacer(),
                     IconButton(
                         onPressed: () async {
+                          log("file: ${animalData.soundUrl}");
                           if (animalData.soundUrl != null) {
-                            await audioPlayer.setUrl(animalData.soundUrl!);
+                            await audioPlayer.setFilePath(animalData.soundUrl!);
                             await audioPlayer.play();
                           }
                         },
@@ -104,9 +105,8 @@ class DetailPage extends StatelessWidget {
                           modelUrl: modelUrl,
                         );
                         await dbHelper.insertFavorite(favorite).then((value) {
-                          favoriteController.isLoading.value = false;
-                          Get.snackbar(
-                              'Success', 'Berhasil menambahkan ke favorite',
+                          Get.snackbar('Tersimpan',
+                              'Data berhasil disimpan offline di halaman favorite',
                               backgroundColor: Colors.white,
                               borderWidth: 1,
                               borderColor: Colors.green,
@@ -114,6 +114,7 @@ class DetailPage extends StatelessWidget {
                               margin: const EdgeInsets.all(15));
                         });
                       }
+                      favoriteController.isLoading.value = false;
                       favoriteController.getListFavorite();
                     }, icon: Obx(
                       () {
